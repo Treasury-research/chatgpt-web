@@ -1,10 +1,15 @@
 import express from 'express'
+import { ethers } from 'ethers'
+import * as jwt from 'jsonwebtoken'
+import type { RowDataPacket } from 'mysql2/promise'
 import type { RequestProps } from './types'
 import type { ChatMessage } from './chatgpt'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
-import { auth } from './middleware/auth'
+import { authJWT } from './middleware/auth-jwt'
 import { limiter } from './middleware/limiter'
 import { isNotEmptyString } from './utils/is'
+import * as mysql from './db/mysql'
+import { randomid } from './utils'
 
 const app = express()
 const router = express.Router()
@@ -19,7 +24,7 @@ app.all('*', (_, res, next) => {
   next()
 })
 
-router.post('/chat-process', [auth, limiter], async (req, res) => {
+router.post('/chat-process', [authJWT, limiter], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
 
   try {
@@ -45,7 +50,7 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
   }
 })
 
-router.post('/config', auth, async (req, res) => {
+router.post('/config', authJWT, async (req, res) => {
   try {
     const response = await chatConfig()
     res.send(response)
@@ -76,6 +81,63 @@ router.post('/verify', async (req, res) => {
       throw new Error('密钥无效 | Secret key is invalid')
 
     res.send({ status: 'Success', message: 'Verify successfully', data: null })
+  }
+  catch (error) {
+    res.send({ status: 'Fail', message: error.message, data: null })
+  }
+})
+
+router.post('/web3/challenge', async (req, res) => {
+  try {
+    const { address } = req.body as { address: string }
+
+    const uri = req.hostname
+    const version = 1
+    const chainId = 137
+    const nonce = randomid(16)
+    const createdAt = Math.floor(Date.now() / 1000)
+
+    await mysql.query('INSERT INTO kchatgpt.challenge (address, uri, version, chainId, nonce, createdAt) VALUES ( ?,?,?,?,?,?);', [address.toLowerCase(), uri, version, chainId, nonce, createdAt])
+
+    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to lens\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
+    res.send({ status: 'Success', message: msg, data: null })
+  }
+  catch (error) {
+    res.send({ status: 'Fail', message: error.message, data: null })
+  }
+})
+
+router.post('/web3/login', async (req, res) => {
+  try {
+    const { address, signature } = req.body as { address: string; signature: string }
+    const row = await mysql.query('select * from kchatgpt.challenge where address = ? order by createdAt desc limit 1;', [address.toLowerCase()]) as RowDataPacket[]
+
+    // console.log(!row.length)
+    if (!row.length)
+      throw new Error('address not found')
+
+    // console.log(row)
+    const { uri, version, chainId, nonce, createdAt } = row[0]
+    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to lens\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
+
+    // ethers.utils
+    const verifyAddress = ethers.verifyMessage(
+      msg,
+      signature,
+    )
+
+    if (verifyAddress.toLowerCase() !== address.toLowerCase())
+      throw new Error('Signature verification failed')
+
+    const accessToken = jwt.sign(
+      {
+        address,
+        uri,
+      },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: '7d' }, // 7 day
+    )
+    res.send({ status: 'Success', message: accessToken, data: null })
   }
   catch (error) {
     res.send({ status: 'Fail', message: error.message, data: null })
