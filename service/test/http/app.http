@@ -1,0 +1,36 @@
+POST /api/web3/challenge HTTP/1.1
+Host: 127.0.0.1:3002
+Content-Type: application/json
+Content-Length: 62
+
+{
+    "address":"0xD3420A3be0a1EFc0FBD13e87141c97B2C9AC9dD3"
+}
+
+###
+
+POST /api/web3/login HTTP/1.1
+Host: localhost:3002
+Content-Type: application/json
+Content-Length: 214
+
+{
+    "address":"0xD3420A3be0a1EFc0FBD13e87141c97B2C9AC9dD3",
+    "signature":"0xfe896257ce64d13b2b1df6b375adb5d93424ec4ff652d5217a9d9eb8019f7b977b2bfd86f6c4ca25b717485318fa037411d11ce1133e8c91159af32e56fc15b11b"
+}
+
+###
+
+POST /api/chat-process HTTP/1.1
+Host: localhost:3002
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHhhNzMyNEVhMzdjMWU5NTQ1MTNjZTgyNkQxNDdBM2I2ZEE0YkI5Y0IzIiwiaWF0IjoxNjgwOTYzNTUyLCJleHAiOjE2ODA5ODE1NTJ9.kHvP4ux66VGXDMLAFaAHcNWTVPPO9xPKYnZDDf4i6AI
+Content-Type: application/json
+Content-Length: 262
+
+{
+    "prompt": "1",
+    "options": {
+        "parentMessageId": "chatcmpl-732iXjGkN2ydpzVvxOBtj6yBaZwyi"
+    },
+    "systemMessage": "You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully. Respond using markdown."
+}
