@@ -25,6 +25,7 @@ const authJWT = async (req, res, next) => {
       next()
     }
     catch (error) {
+			// console.log("error",error);
       res.send({ status: 'Unauthorized', message: error.message ?? 'Please authenticate.', data: null })
     }
   }

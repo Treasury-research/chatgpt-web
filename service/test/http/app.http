@@ -1,3 +1,9 @@
+
+POST /api/session HTTP/1.1
+Host: 127.0.0.1:3002
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHhhNzMyNEVhMzdjMWU5NTQ1MTNjZTgyNkQxNDdBM2I2ZEE0YkI5Y0IzIiwiaWF0IjoxNjgwOTYzNTUyLCJleHAiOjE2ODA5ODE1NTJ9.kHvP4ux66VGXDMLAFaAHcNWTVPPO9xPKYnZDDf4i6AI
+
+###
 POST /api/web3/challenge HTTP/1.1
 Host: 127.0.0.1:3002
 Content-Type: application/json

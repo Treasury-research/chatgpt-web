@@ -9,7 +9,7 @@ async function main() {
   const wallet = new ethers.Wallet(privateKey)
 
   // The message you want to sign
-  const message = '\nlocalhost wants you to sign in with your Ethereum account:\n0xD3420A3be0a1EFc0FBD13e87141c97B2C9AC9dD3\n\nSign in with ethereum to lens\n\nURI: localhost\nVersion: 1\nChain ID: 137\nNonce: hc3S90xS5rTdPmAl\nIssued At: 1681007753\n '
+  const message = '\nlocalhost wants you to sign in with your Ethereum account:\n0xD3420A3be0a1EFc0FBD13e87141c97B2C9AC9dD3\n\nSign in with ethereum to lens\n\nURI: localhost\nVersion: 1\nChain ID: 137\nNonce: 1qne6rC372XnmcR3\nIssued At: 1681111334\n '
 
   // Sign the message using the wallet
   const signature = await wallet.signMessage(message)

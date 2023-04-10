@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../src/'
+import app from '../src/app'
 
 describe('GET /healthcheck', () => {
 	it('should return a 200 status code', async () => {
