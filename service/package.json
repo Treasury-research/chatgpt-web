@@ -22,7 +22,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "common:cleanup": "rimraf node_modules && rimraf pnpm-lock.yaml",
-		"test": "jest"
+		"test": "NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "dependencies": {
     "@types/jest": "^29.5.0",
