@@ -60,12 +60,12 @@ router.post('/config', authJWT, async (req, res) => {
 })
 
 router.post('/session', authJWT, async (req, res) => {
-	try {
-		res.send({ status: 'Success', message: '', data: { auth: true, model: currentModel() } })
-	}
-	catch (error) {
-		res.send({ status: 'Fail', message: error.message, data: null })
-	}
+  try {
+    res.send({ status: 'Success', message: '', data: { auth: true, model: currentModel() } })
+  }
+  catch (error) {
+    res.send({ status: 'Fail', message: error.message, data: null })
+  }
 })
 
 /*
@@ -90,8 +90,8 @@ router.post('/verify', async (req, res) => {
 router.post('/web3/challenge', async (req, res) => {
   try {
     const { address } = req.body as { address: string }
-
-    const uri = req.headers.host
+    // console.log('req.headers', req.headers)
+    const uri = req.hostname
     const version = 1
     const chainId = 137
     const nonce = randomid(16)
