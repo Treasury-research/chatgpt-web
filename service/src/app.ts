@@ -60,14 +60,14 @@ router.post('/config', authJWT, async (req, res) => {
 	}
 })
 
-router.post('/session', authJWT, async (req, res) => {
-	try {
-		res.send({ status: 'Success', message: '', data: { auth: true, model: currentModel() } })
-	}
-	catch (error) {
-		res.send({ status: 'Fail', message: error.message, data: null })
-	}
-})
+// router.post('/session', authJWT, async (req, res) => {
+// 	try {
+// 		res.send({ status: 'Success', message: '', data: { auth: true, model: currentModel() } })
+// 	}
+// 	catch (error) {
+// 		res.send({ status: 'Fail', message: error.message, data: null })
+// 	}
+// })
 
 /*
 router.post('/verify', async (req, res) => {
