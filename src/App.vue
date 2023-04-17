@@ -58,6 +58,11 @@ async function connectWallet() {
     address.value = (await web3.eth.getAccounts())[0];
     addressStore.setAddress(address.value)
     window.localStorage.setItem("address", address.value);
+    const chainId = 137
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: `0x${chainId.toString(16)}` }],
+    });
     const res = await getChallenge(address.value);
     const signature = await web3.eth.personal.sign(res.message, address.value);
     const res1 = await login(address.value, signature);
