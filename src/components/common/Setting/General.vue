@@ -67,7 +67,7 @@ function updateUserInfo(options: Partial<UserInfo>) {
 function handleReset() {
   userStore.resetUserInfo()
   ms.success(t('common.success'))
-  window.location.reload()
+  // window.location.reload()
 }
 
 function exportData(): void {

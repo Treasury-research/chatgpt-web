@@ -31,7 +31,7 @@ async function handleVerify() {
     await fetchVerify(secretKey)
     authStore.setToken(secretKey)
     ms.success('success')
-    window.location.reload()
+    // window.location.reload()
   }
   catch (error: any) {
     ms.error(error.message ?? 'error')
