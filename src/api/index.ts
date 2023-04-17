@@ -58,6 +58,25 @@ export function fetchSession<T>() {
   })
 }
 
+export function getChallenge<T>(address:any) {
+  return post<T>({
+    url: '/web3/challenge',
+    data:{
+      address
+    }
+  })
+}
+
+export function login<T>(address:any,signature:any) {
+  return post<T>({
+    url: '/web3/login',
+    data:{
+      address,
+      signature
+    }
+  })
+}
+
 export function fetchVerify<T>(token: string) {
   return post<T>({
     url: '/verify',

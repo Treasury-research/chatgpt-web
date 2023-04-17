@@ -1,6 +1,7 @@
 import type { AxiosProgressEvent, AxiosResponse, GenericAbortSignal } from 'axios'
 import request from './axios'
-import { useAuthStore } from '@/store'
+import { useAuthStore, useAddressStore } from '@/store'
+import { createDiscreteApi } from 'naive-ui'
 
 export interface HttpOption {
   url: string
@@ -29,8 +30,30 @@ function http<T = any>(
       return res.data
 
     if (res.data.status === 'Unauthorized') {
+      const { message } = createDiscreteApi(
+        ['message']
+      )
+      const appSetting: any = window.localStorage.getItem('appSetting')
+      const language = JSON.parse(appSetting)['data']['language']
+      const languageObj: any = {
+        noPermision: {
+          'zh-TW': '未經授權，請聯系管理員。',
+          'en-US': 'Unauthorized, please contact the administrator。',
+          'zh-CN': '未经授权，请联系管理员。',
+        },
+        loginAgin: {
+          'zh-TW': '帳號已過期，請重新登入。',
+          'en-US': 'The account has expired, please log in again。',
+          'zh-CN': '账号已过期，请重新登录。',
+        }
+      }
+      if (useAddressStore().address && useAuthStore().token) {
+        message.error(languageObj['noPermision'][language])
+      } else {
+        message.error(languageObj['loginAgin'][language])
+      }
       authStore.removeToken()
-      window.location.reload()
+      window.localStorage.removeItem('signature')
     }
 
     return Promise.reject(res.data)

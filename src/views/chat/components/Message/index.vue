@@ -57,7 +57,6 @@ const options = computed(() => {
       icon: iconRender({ icon: asRawText.value ? 'ic:outline-code-off' : 'ic:outline-code' }),
     })
   }
-
   return common
 })
 

@@ -28,6 +28,7 @@ export default defineConfig((env) => {
     resolve: {
       alias: {
         '@': path.resolve(process.cwd(), 'src'),
+        web3: 'web3/dist/web3.min.js'
       },
     },
     plugins: setupPlugins(viteEnv),
