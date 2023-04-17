@@ -11,16 +11,38 @@ import { useAuthStore } from "@/store";
 import { useAddressStore } from "@/store";
 
 const { language } = useLanguage();
+const authStore = useAuthStore();
+const addressStore = useAddressStore();
 let web3 = ref<any>("");
 let connected = ref<boolean>(false);
 let message = ref<any>("");
 let signature = ref<any>("");
 let address = ref<any>("");
 let btnDes = ref<any>("");
+listenAccountChange();
+initLogin();
+
+function listenAccountChange() {
+  if (!window.ethereum) {
+    console.log("请先安装metamask！");
+    return;
+  }
+  window.ethereum.on("accountsChanged", async (accounts) => {
+    btnDes.value = "Connect";
+    logOut();
+    connectWallet();
+  });
+}
+
+function initLogin() {
+  if (!useAddressStore().address) {
+    connectWallet();
+  }
+}
 
 function setBtnDes() {
   if (useAddressStore().address && useAuthStore().token) {
-    btnDes.value = shortenAddr(useAddressStore().address,3)
+    btnDes.value = shortenAddr(useAddressStore().address, 3);
   } else if (!useAddressStore().address && !useAuthStore().token) {
     btnDes.value = "Connect";
   } else {
@@ -29,36 +51,29 @@ function setBtnDes() {
 }
 
 function shortenAddr(res, length = 3) {
-  if(!res) return ''
+  if (!res) return "";
   return `${res.slice(0, length)}...${res.slice(-length)}`;
 }
 
 function logOut() {
-  const authStore = useAuthStore();
-  const addressStore = useAddressStore();
   authStore.removeToken();
   addressStore.removeAddress();
 }
 
 async function connectWallet() {
-  if(btnDes.value !== "Connect" && btnDes.value !== "Login"){
-    return
-  }
-  const authStore = useAuthStore();
-  const addressStore = useAddressStore();
   // console.log(window.ethereum)
   if (window && window.ethereum) {
     if (!window.ethereum) {
-      console.log('请先安装metamask！')
+      console.log("请先安装metamask！");
       return;
     }
     await window.ethereum.enable();
     // await window.ethereum.request({ method: "eth_requestAccounts" });
     web3 = await new Web3(window.ethereum);
     address.value = (await web3.eth.getAccounts())[0];
-    addressStore.setAddress(address.value)
+    addressStore.setAddress(address.value);
     window.localStorage.setItem("address", address.value);
-    const chainId = 137
+    const chainId = 137;
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: `0x${chainId.toString(16)}` }],
@@ -76,16 +91,19 @@ async function connectWallet() {
 
 watch(
   () => useAuthStore().token,
-  () => {setBtnDes()},
+  () => {
+    setBtnDes();
+  },
   { immediate: true }
 );
 
 watch(
   () => useAddressStore().address,
-  () => {setBtnDes()},
+  () => {
+    setBtnDes();
+  },
   { immediate: true }
 );
-
 </script>
 
 <template>
@@ -103,10 +121,11 @@ watch(
               {{ btnDes }}
             </NButton>
           </div>
-          <div class="w-[100px]" v-if="useAddressStore().address && useAuthStore().token">
-          <NButton block @click="logOut">
-            Log out
-          </NButton>
+          <div
+            class="w-[100px]"
+            v-if="useAddressStore().address && useAuthStore().token"
+          >
+            <NButton block @click="logOut"> Log out </NButton>
           </div>
         </div>
       </div>
