@@ -5,9 +5,10 @@ export async function check(address: string): Promise<boolean> {
   if (!address)
     return false
 
-  const row = await mysql.query('select * from kchatgpt.whitelist where address = ? limit 1;', [address.toLowerCase()]) as RowDataPacket[]
+  const rowWhitelist = await mysql.query('select * from kchatgpt.whitelist where address = ? limit 1;', [address.toLowerCase()]) as RowDataPacket[]
+  const rowNFT = await mysql.query('select * from lens.tp_account where owner = ? limit 1;', [address.toLowerCase()]) as RowDataPacket[]
 
-  if (!row.length)
+  if (!rowWhitelist.length && !rowNFT.length)
     return false
 
   return true
