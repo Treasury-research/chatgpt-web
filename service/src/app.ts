@@ -99,7 +99,7 @@ router.post('/web3/challenge', async (req, res) => {
     const status = 1
     await mysql.query('INSERT INTO kchatgpt.challenge (address, uri, version, chainId, nonce, createdAt, status) VALUES ( ?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE uri=VALUES(uri), nonce=VALUES(nonce), createdAt=VALUES(createdAt), status=VALUES(status) ; ', [address.toLowerCase(), uri, version, chainId, nonce, createdAt, status])
 
-    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to lens\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
+    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to knn3\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
     res.send({ status: 'Success', message: msg, data: null })
   }
   catch (error) {
@@ -126,7 +126,7 @@ router.post('/web3/login', async (req, res) => {
     // update status to 0
     await mysql.query('UPDATE kchatgpt.challenge SET status = 0 WHERE address = ? ;', [address.toLowerCase()])
 
-    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to lens\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
+    const msg = `\n${uri} wants you to sign in with your Ethereum account:\n${address}\n\nSign in with ethereum to knn3\n\nURI: ${uri}\nVersion: ${version}\nChain ID: ${chainId}\nNonce: ${nonce}\nIssued At: ${createdAt}\n `
 
     // ethers.utils
     const verifyAddress = ethers.verifyMessage(
