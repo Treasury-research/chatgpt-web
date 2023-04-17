@@ -30,28 +30,28 @@ function http<T = any>(
       return res.data
 
     if (res.data.status === 'Unauthorized') {
-      const { message } = createDiscreteApi(
-        ['message']
-      )
-      const appSetting: any = window.localStorage.getItem('appSetting')
-      const language = JSON.parse(appSetting)['data']['language']
-      const languageObj: any = {
-        noPermision: {
-          'zh-TW': '未經授權，請聯系管理員。',
-          'en-US': 'Unauthorized, please contact the administrator。',
-          'zh-CN': '未经授权，请联系管理员。',
-        },
-        loginAgin: {
-          'zh-TW': '帳號已過期，請重新登入。',
-          'en-US': 'The account has expired, please log in again。',
-          'zh-CN': '账号已过期，请重新登录。',
-        }
-      }
-      if (useAddressStore().address && useAuthStore().token) {
-        message.error(languageObj['noPermision'][language])
-      } else {
-        message.error(languageObj['loginAgin'][language])
-      }
+      // const { message } = createDiscreteApi(
+      //   ['message']
+      // )
+      // const appSetting: any = window.localStorage.getItem('appSetting')
+      // const language = JSON.parse(appSetting)['data']['language']
+      // const languageObj: any = {
+      //   noPermision: {
+      //     'zh-TW': '未經授權，請聯系管理員。',
+      //     'en-US': 'Unauthorized, please contact the administrator。',
+      //     'zh-CN': '未经授权，请联系管理员。',
+      //   },
+      //   loginAgin: {
+      //     'zh-TW': '帳號已過期，請重新登入。',
+      //     'en-US': 'The account has expired, please log in again。',
+      //     'zh-CN': '账号已过期，请重新登录。',
+      //   }
+      // }
+      // if (useAddressStore().address && useAuthStore().token) {
+      //   message.error(languageObj['noPermision'][language])
+      // } else {
+      //   message.error(languageObj['loginAgin'][language])
+      // }
       authStore.removeToken()
       window.localStorage.removeItem('signature')
     }
