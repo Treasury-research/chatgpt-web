@@ -16,7 +16,7 @@ const authJWT = async (req, res, next) => {
       // check whitelist
       const { address, uri } = jwt.verify(accessToken, process.env.JWT_SECRET || 'secret')
 
-      if (uri !== req.hostname)
+      if (uri !== req.headers.origin)
         throw new Error('Error: 无访问权限 | No access rights')
 
       if (!await whitelist.check(address))
@@ -25,7 +25,7 @@ const authJWT = async (req, res, next) => {
       next()
     }
     catch (error) {
-			// console.log("error",error);
+      // console.log("error",error);
       res.send({ status: 'Unauthorized', message: error.message ?? 'Please authenticate.', data: null })
     }
   }

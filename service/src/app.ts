@@ -91,7 +91,7 @@ router.post('/web3/challenge', async (req, res) => {
   try {
     const { address } = req.body as { address: string }
     // console.log('req.headers', req.headers)
-    const uri = req.hostname
+    const uri = req.headers.origin
     const version = 1
     const chainId = 137
     const nonce = randomid(16)
