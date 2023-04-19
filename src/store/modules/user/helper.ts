@@ -15,9 +15,9 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/Chanzhaoyu/chatgpt-web/main/src/assets/avatar.jpg',
-      name: 'ChenZhaoYu',
-      description: 'Star on <a href="https://github.com/Chanzhaoyu/chatgpt-bot" class="text-blue-500" target="_blank" >Github</a>',
+      avatar: 'https://lens.infura-ipfs.io/ipfs/QmNVX7Pb1Xe46w2FNqBxzNiu56t99TcPNrBBKoGNfrVTqQ',
+      name: 'KNN3 Network',
+      description: '<a href="https://www.knn3.xyz/" class="text-blue-500" target="_blank" >Learn more</a>',
     },
   }
 }
